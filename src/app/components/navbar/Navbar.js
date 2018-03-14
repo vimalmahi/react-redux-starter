@@ -31,7 +31,7 @@ export default class AppNavbar extends React.Component {
 	render() {
 		return (
 			<div>
-				<Navbar color="dark" dark="true" expand="md">
+				<Navbar color="dark" dark={true} expand="md">
 					<NavbarBrand href="/">React Redux Starter</NavbarBrand>
 					<NavbarToggler onClick={this.toggle} />
 					<Collapse isOpen={this.state.isOpen} navbar>

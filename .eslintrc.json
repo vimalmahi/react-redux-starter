@@ -19,7 +19,6 @@
         "accessor-pairs": "error",
         "array-bracket-spacing": "error",
         "array-callback-return": "error",
-        "arrow-body-style": "error",
         "arrow-parens": [
             "error",
             "as-needed"
@@ -71,10 +70,6 @@
         "func-call-spacing": "error",
         "func-name-matching": "error",
         "func-names": "error",
-        "func-style": [
-            "error",
-            "declaration"
-        ],
         "generator-star-spacing": "error",
         "global-require": "error",
         "guard-for-in": "error",
@@ -214,10 +209,7 @@
             "error",
             "always"
         ],
-        "object-property-newline": "error",
         "object-shorthand": "error",
-        "one-var": "error",
-        "one-var-declaration-per-line": "error",
         "operator-assignment": "error",
         "operator-linebreak": "error",
         "padded-blocks": "off",
@@ -241,9 +233,6 @@
         "rest-spread-spacing": "error",
         "semi": "error",
         "semi-spacing": "error",
-        "sort-imports": "off",
-        "sort-keys": "error",
-        "sort-vars": "error",
         "space-before-blocks": "error",
         "space-before-function-paren": "off",
         "space-in-parens": [
