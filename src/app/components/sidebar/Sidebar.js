@@ -1,42 +1,45 @@
 import React from 'react';
-import { Nav, NavItem, NavLink, ListGroup, ListGroupItem } from 'reactstrap';
+import { Nav, ListGroup, ListGroupItem } from 'reactstrap';
 import { connect } from 'react-redux';
+import { toggleMenuItem } from '../../../actions/index';
 import './Sidebar.css';
 
 export class AppSidebar extends React.Component {
-	render() {
-		console.log(this.props);
+	openMenu(item) {
+		this.props.toggleMenuItem(item);
+	}
 
+	render() {
 		return (
 			<Nav className="col-sm-3 col-md-2 hidden-xs-down bg-faded sidebar">
 				<ListGroup className="nav nav-pills flex-column w-100">
-					<ListGroupItem action>
-						<i className="fa fa-dashboard"></i>
-						<span className="hidden-sm-down pl-3">Home</span>
-						<i className="fa fa-angle-down pull-right arrow-icon"></i>
-						<i className="fa fa-angle-right pull-right arrow-icon"></i>
-					</ListGroupItem>
-					<div>
-						<ListGroupItem action>Sub Menu 1</ListGroupItem>
-						<ListGroupItem action>Sub Menu 2</ListGroupItem>
-					</div>
-					<ListGroupItem className="active" action>
-						<i className="fa fa-list"></i>
-						<span className="hidden-sm-down pl-3">Overview</span>
-						<span className="sr-only">(current)</span>
-					</ListGroupItem>
-					<ListGroupItem action>
-						<i className="fa fa-clock-o"></i>
-						<span className="hidden-sm-down pl-3">Reports</span>
-					</ListGroupItem>
-					<ListGroupItem action>
-						<i className="fa fa-th"></i>
-						<span className="hidden-sm-down pl-3">Analytics</span>
-					</ListGroupItem>
-					<ListGroupItem action>
-						<i className="fa fa-gear"></i>
-						<span className="hidden-sm-down pl-3">Export</span>
-					</ListGroupItem>
+					{
+						this.props.menuItems.map((item, index) => {
+							return <div key={index}>
+								<ListGroupItem action onClick={() => this.openMenu(item)}>
+									<i className={'fa fa-' + item.icon}></i>
+									<span className="hidden-sm-down pl-3">{item.name}</span>
+									{
+										item.children &&
+										<span>
+											{item.active && <i className="fa fa-angle-down pull-right arrow-icon"></i>}
+											{!item.active && <i className="fa fa-angle-right pull-right arrow-icon"></i>}
+										</span>
+									}
+
+								</ListGroupItem>
+								{
+									item.active && <div>
+										{
+											item.children && item.children.map((subitem, i) => {
+												return <ListGroupItem key={i} action>{subitem.name}</ListGroupItem>;
+											})
+										}
+									</div>
+								}
+							</div>;
+						})
+					}
 				</ListGroup>
 			</Nav>
 		);
@@ -47,5 +50,11 @@ const mapStateToProps = state => {
 	return { 'menuItems': state.menuItems };
 };
 
-export default connect(mapStateToProps)(AppSidebar);
+const mapDispatchToProps = dispatch => {
+	return {
+		'toggleMenuItem': item => dispatch(toggleMenuItem(item))
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppSidebar);
 
