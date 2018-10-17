@@ -1,74 +1,136 @@
 import React from 'react';
-import {
-	Table
-} from 'reactstrap';
 import './Cell.css';
 import $ from 'jquery'
+import { getBoardSize } from '../board/Board'
+import { Exception } from 'handlebars';
 
-
-const CROSS_SYMBOL = 'X'  // Player 1 
-const CIRCLE_SYMBOL = 'O' // Player 2
-const NO_OF_CELLS_PER_ROW = 3; 
+export const CROSS_SYMBOL = 'X'  // Player 1 
+export const CIRCLE_SYMBOL = 'O' // Player 2
 let lastSelectedSymbol = CIRCLE_SYMBOL 
 let drawCountArray = []
-drawCountArray[CROSS_SYMBOL] = 0;
-drawCountArray[CIRCLE_SYMBOL] = 0;
+drawCountArray[CROSS_SYMBOL] = 0
+drawCountArray[CIRCLE_SYMBOL] = 0
+let gameComplete = false;
+let tableContent 
+let specialCombos = []
+let NO_OF_CELLS_PER_ROW;
+
+export function resetLastSelectedSymbol() {
+	lastSelectedSymbol = CIRCLE_SYMBOL;
+}
+
+export function resetGameComplete() {
+	gameComplete = false;
+}
 
 export default class Cell extends React.Component {
 	
-	drawSymbol = (event) => {
-		if (event.target.innerHTML == "") {
-			let symbolToDraw = (lastSelectedSymbol == CIRCLE_SYMBOL) ? CROSS_SYMBOL : CIRCLE_SYMBOL;
-			lastSelectedSymbol = event.target.innerHTML = symbolToDraw;
-			event.target.className = 'cell after-draw'
+	constructor(props) {
+		super(props);
+		console.log(NO_OF_CELLS_PER_ROW);
+		NO_OF_CELLS_PER_ROW = getBoardSize()
+	}
 
+	drawSymbol = (event) => {
+		if (event.target.innerHTML === "" && gameComplete === false) {
+			let symbolToDraw = (lastSelectedSymbol === CIRCLE_SYMBOL) ? CROSS_SYMBOL : CIRCLE_SYMBOL;
+			lastSelectedSymbol = event.target.innerHTML = symbolToDraw;
+			event.target.removeAttribute('style')
+			event.target.className = 'cell after-draw'
 			drawCountArray[symbolToDraw]++;
 			if (drawCountArray[symbolToDraw] >= NO_OF_CELLS_PER_ROW) {
 				this.checkForWin(event.target, lastSelectedSymbol)
 			}
 		}
 	} 
-	
+
 	checkForWin = (cellObject, lastSelectedSymbol) => {
 		let rowIndex = cellObject.parentNode.rowIndex
 		let colIndex = cellObject.cellIndex
-		let tableContent = cellObject.parentNode.parentNode;
+		tableContent = cellObject.parentNode.parentNode;
 		//Check for same row
-		for(let i = 0; i < 3; i++) {
-			if (this.getCellValueFromIndicies(tableContent, rowIndex, i) != lastSelectedSymbol) {
+		for(let i = 0; i < NO_OF_CELLS_PER_ROW; i++) {
+			if (this.getCellValueFromIndicies(tableContent, rowIndex, i) !== lastSelectedSymbol) {
 				break;
 			}
-			if (i == 2) {
-				this.showWinningCombos(tableContent, 'row', rowIndex)
+			if (i === NO_OF_CELLS_PER_ROW - 1) {
+				this.showWinningCombo(tableContent, 'row', rowIndex)
+				document.getElementById("message").innerHTML = lastSelectedSymbol+ ' wins'
 			}
 		}		
 		//Check for same col
-		for(let i = 0; i < 3; i++) {
-			if (this.getCellValueFromIndicies(tableContent, i, colIndex) != lastSelectedSymbol) {
+		for(let i = 0; i < NO_OF_CELLS_PER_ROW; i++) {
+			if (this.getCellValueFromIndicies(tableContent, i, colIndex) !== lastSelectedSymbol) {
 				break;
 			}
-			if (i == 2) {
-				this.showWinningCombos(tableContent, 'col', colIndex)
+			if (i === NO_OF_CELLS_PER_ROW -1) {
+				this.showWinningCombo(tableContent, 'col', colIndex)
+				document.getElementById("message").innerHTML = lastSelectedSymbol+ ' wins'
 			}
 		}
+		this.setSpecialCombos()
+		let self = this
+		specialCombos.forEach(function(arr){
+			for (let i = 0; i < NO_OF_CELLS_PER_ROW; i++) {
+				if (self.getCellValueFromIndicies(tableContent, arr[i][0], arr[i][1]) !== lastSelectedSymbol) {
+					break;
+				}
+				if (i === NO_OF_CELLS_PER_ROW -1) {
+					self.showWinningCombo(
+						tableContent, 
+						arr[i][1] === 0? 'rtl':'ltr' 
+					)
+					document.getElementById("message").innerHTML = lastSelectedSymbol+ ' wins'
+				}
+			}
+		});
 	}
 
-	showWinningCombos = (tableContent, orientation, index) => {
-		if (orientation == 'row') {
+	setSpecialCombos = () => {
+		let leftDiagonal = []
+		let rightDiagonal = []
+		let rightDiagonalStartIndex = NO_OF_CELLS_PER_ROW - 1;
+		for(let i = 0; i < NO_OF_CELLS_PER_ROW; i++) {
+			for(let j = 0; j < NO_OF_CELLS_PER_ROW; j++) {
+				if (i === j) {
+					leftDiagonal.push([i,j])
+				}
+			}
+			for(let k = rightDiagonalStartIndex--; k >= 0; k--) {
+				rightDiagonal.push([i,k])
+				break;
+			}
+		}
+		specialCombos = [leftDiagonal, rightDiagonal]
+	}
+
+	showWinningCombo = (tableContent, orientation, index=null) => {
+		
+		gameComplete = true;
+		drawCountArray[CROSS_SYMBOL] = 0
+		drawCountArray[CIRCLE_SYMBOL] = 0
+		
+		if (orientation === 'row') {
 			$(tableContent).find('tr').eq(index).find('td').css('background-color', 'lightgreen')
-			$(tableContent).find('td').each(function(){
-				window.removeEventListener('click', this.onClick, false)
-			});
-		} else if (orientation == 'col') {
+		} else if (orientation === 'col') {
 			$(tableContent).find('tr').each(function(value) {
 				$(this).find('td').eq(index).css('background-color', 'lightgreen')
-				$(this).find('td').removeEventListener('click', this.onClick)
 			});
+		} else if (orientation === 'ltr') {
+			let specialComboLtr = specialCombos[0]
+			for (let i = 0; i < NO_OF_CELLS_PER_ROW; i ++ ) {
+				tableContent.rows[specialComboLtr[i][0]].cells[specialComboLtr[i][1]].style.backgroundColor = 'lightgreen'
+			}			
+		} else if (orientation === 'rtl') {
+			let specialComboRtl = specialCombos[1]
+			for (let i = 0; i < NO_OF_CELLS_PER_ROW; i ++ ) {
+				tableContent.rows[specialComboRtl[i][0]].cells[specialComboRtl[i][1]].style.backgroundColor = 'lightgreen'
+			}			
 		} else {
-			alert("Some error")
+			throw new Exception("No winning combos found")
+			return;
 		}
 	}
-
 
 	getCellValueFromIndicies = (tableContent, rowIndex, colIndex) => {
 		rowIndex = Math.abs(rowIndex)
