@@ -1,15 +1,21 @@
-table td {
+/**
+ * @author Vimal Maheedharan
+ * @copyright Jango
+ */
+
+table.table{
+    margin: 0 auto 0 auto;
+}
+
+ table td {
     padding: 0 0 0 0
 }
 
 .player-info {
-    width: 90%;
-    text-align: center
+    margin: 10px
 }
 
 #message {
-    width: 90%;
-    text-align: center;
     color: green;
     height: 30px;
     margin-top: 10px;
@@ -18,4 +24,16 @@ table td {
 
 button{
     margin:5px;
+}
+
+.wrapper {
+    margin: 0 auto 0 auto;
+    text-align: center;
+    max-width: 1000px;
+    padding-bottom: 50px;
+	float: none
+}
+
+select{
+    margin-left: 5px 
 }

@@ -1,12 +1,17 @@
+/**
+ * @author Vimal Maheedharan
+ * @copyright Jango
+ */
 import React from 'react';
 import {
-	Table, Button
+	Table 
 } from 'reactstrap';
 import './Board.css';
 import $ from 'jquery'
-import Cell, { resetLastSelectedSymbol, resetGameComplete, CROSS_SYMBOL, CIRCLE_SYMBOL }  from '../cell/Cell'
+import Cell, { resetLastSelectedSymbol, resetGameComplete, CROSS_SYMBOL, CIRCLE_SYMBOL, setBoardSize }  from '../cell/Cell'
 
 let BOARD_SIZE = 3
+const BOARD_SIZE_MULTIPLIER = 100
 
 export function getBoardSize () {
 	return BOARD_SIZE;
@@ -32,15 +37,16 @@ export default class Board extends React.Component {
 		return rows
 	}
 
-	changeSize = (event) => {
-		BOARD_SIZE = event.target.value;
+	changeSize = () => {
+		BOARD_SIZE = document.getElementById("board-size").value;
 		this.forceUpdate()
 		this.redrawTable()
 		this.changeStyle()
+		setBoardSize();
 	}
 	
 	changeStyle = () => {
-		let sideLength = BOARD_SIZE * 70
+		let sideLength = BOARD_SIZE * BOARD_SIZE_MULTIPLIER
 		$(".table").css("height", sideLength) 
 		$(".table").css("width", sideLength)
 	}
@@ -49,17 +55,15 @@ export default class Board extends React.Component {
 		resetLastSelectedSymbol()
 		resetGameComplete()
 		$(".cell").html("").removeClass().addClass("cell").attr('style', '')
-		$("#message").html("New game started")
+		$("#message").html("")
 	}
 	
 	render() {
 		return (
-			<div>
+			<div class="wrapper">
 				<div className="player-info">
-				
-					Player 1: {CROSS_SYMBOL}, Player 2: {CIRCLE_SYMBOL} <br/>
-					Select Size: 
-					<select onChange={this.changeSize}>
+					Select Size:
+					<select id="board-size">
 						<option value="3" selected>3</option>
 						<option value="4">4</option>
 						<option value="5">5</option>
@@ -68,7 +72,8 @@ export default class Board extends React.Component {
 						<option value="8">8</option>
 						<option value="9">9</option>
 					</select>
-					<Button onClick={this.redrawTable}>Start again</Button>
+					<button type="button" class="btn-sm btn-primary" onClick={this.changeSize}>Change Board Size</button>
+					<button type="button" class="btn btn-link" onClick={this.redrawTable}>Reset</button>
 				</div>
 				<div id="message"></div>
 				<Table className="inner-table" id="play-board">

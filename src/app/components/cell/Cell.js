@@ -1,11 +1,15 @@
+/**
+ * @author Vimal Maheedharan
+ * @copyright Jango
+ */
 import React from 'react';
 import './Cell.css';
 import $ from 'jquery'
 import { getBoardSize } from '../board/Board'
 import { Exception } from 'handlebars';
-
-export const CROSS_SYMBOL = 'X'  // Player 1 
-export const CIRCLE_SYMBOL = 'O' // Player 2
+// glyphicon glyphicon-star-empty
+export const CROSS_SYMBOL = '<span class="glyphicon glyphicon-ok"></span>'  // Player 1 
+export const CIRCLE_SYMBOL = '<span class="glyphicon glyphicon-star-empty"></span>' // Player 2
 let lastSelectedSymbol = CIRCLE_SYMBOL 
 let drawCountArray = []
 drawCountArray[CROSS_SYMBOL] = 0
@@ -25,6 +29,10 @@ export function resetGameComplete() {
 	drawCountArray[CIRCLE_SYMBOL] = 0
 }
 
+export function setBoardSize() {
+	NO_OF_CELLS_PER_ROW = getBoardSize()
+}
+
 export default class Cell extends React.Component {
 	
 	constructor(props) {
@@ -33,6 +41,7 @@ export default class Cell extends React.Component {
 	}
 
 	drawSymbol = (event) => {
+		console.log(NO_OF_CELLS_PER_ROW)
 		if (event.target.innerHTML === "" && gameComplete === false) {
 			let symbolToDraw = (lastSelectedSymbol === CIRCLE_SYMBOL) ? CROSS_SYMBOL : CIRCLE_SYMBOL;
 			lastSelectedSymbol = event.target.innerHTML = symbolToDraw;
@@ -40,7 +49,6 @@ export default class Cell extends React.Component {
 			event.target.className = 'cell after-draw'
 			drawCountArray[symbolToDraw]++;
 			if (drawCountArray[symbolToDraw] >= NO_OF_CELLS_PER_ROW) {
-				alert("here")
 				this.checkForWin(event.target, lastSelectedSymbol)
 			}
 		}
@@ -139,7 +147,7 @@ export default class Cell extends React.Component {
 		if (rowIndex < NO_OF_CELLS_PER_ROW && colIndex < NO_OF_CELLS_PER_ROW) {
 			return tableContent.rows[rowIndex].cells[colIndex].innerHTML;
 		} else {
-			console.log(rowIndex + ":rowIndex or "+colIndex + ":colIndex is out of bounds")
+			console.log(rowIndex + ":rowIndex or "+colIndex + ":colIndex is out of bounds") //Don't remove this
 		}
 		return
 	} 
