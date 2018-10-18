@@ -13,9 +13,12 @@ export function getBoardSize () {
 }
 
 export default class Board extends React.Component {
-	
+
+	componentDidMount = () => {
+		this.changeStyle()
+	}
+
 	createCells = () => {
-		console.log(BOARD_SIZE)
 		let rows = []
 		for(let i = 0; i < BOARD_SIZE; i++) {
 			let cols = []
@@ -33,8 +36,15 @@ export default class Board extends React.Component {
 		BOARD_SIZE = event.target.value;
 		this.forceUpdate()
 		this.redrawTable()
+		this.changeStyle()
 	}
 	
+	changeStyle = () => {
+		let sideLength = BOARD_SIZE * 70
+		$(".table").css("height", sideLength) 
+		$(".table").css("width", sideLength)
+	}
+
 	redrawTable = () => {
 		resetLastSelectedSymbol()
 		resetGameComplete()
@@ -50,7 +60,6 @@ export default class Board extends React.Component {
 					Player 1: {CROSS_SYMBOL}, Player 2: {CIRCLE_SYMBOL} <br/>
 					Select Size: 
 					<select onChange={this.changeSize}>
-						<option value="2">2</option>
 						<option value="3" selected>3</option>
 						<option value="4">4</option>
 						<option value="5">5</option>

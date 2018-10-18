@@ -21,13 +21,14 @@ export function resetLastSelectedSymbol() {
 
 export function resetGameComplete() {
 	gameComplete = false;
+	drawCountArray[CROSS_SYMBOL] = 0
+	drawCountArray[CIRCLE_SYMBOL] = 0
 }
 
 export default class Cell extends React.Component {
 	
 	constructor(props) {
 		super(props);
-		console.log(NO_OF_CELLS_PER_ROW);
 		NO_OF_CELLS_PER_ROW = getBoardSize()
 	}
 
@@ -35,10 +36,11 @@ export default class Cell extends React.Component {
 		if (event.target.innerHTML === "" && gameComplete === false) {
 			let symbolToDraw = (lastSelectedSymbol === CIRCLE_SYMBOL) ? CROSS_SYMBOL : CIRCLE_SYMBOL;
 			lastSelectedSymbol = event.target.innerHTML = symbolToDraw;
-			event.target.removeAttribute('style')
+			//event.target.removeAttribute('style')
 			event.target.className = 'cell after-draw'
 			drawCountArray[symbolToDraw]++;
 			if (drawCountArray[symbolToDraw] >= NO_OF_CELLS_PER_ROW) {
+				alert("here")
 				this.checkForWin(event.target, lastSelectedSymbol)
 			}
 		}
@@ -128,7 +130,6 @@ export default class Cell extends React.Component {
 			}			
 		} else {
 			throw new Exception("No winning combos found")
-			return;
 		}
 	}
 

@@ -1,7 +1,5 @@
-.table {
-    width: 301px;
-    height: 301px;
-    margin-left: 30%
+table td {
+    padding: 0 0 0 0
 }
 
 .player-info {
