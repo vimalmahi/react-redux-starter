@@ -1,5 +1,6 @@
 .App {
     min-height: 100vh;
     border: solid 100 px red;
+    margin-top: 50px; 
 }
 

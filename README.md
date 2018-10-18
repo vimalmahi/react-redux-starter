@@ -1,1 +1,7 @@
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
+### Pre-requisites
+
+* yarn 1.10+
+
+### Installation steps
+
+* yarn install 

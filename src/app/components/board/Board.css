@@ -11,15 +11,18 @@ table.table{
     padding: 0 0 0 0
 }
 
-.player-info {
-    margin: 10px
+#message {
+    height: 30px;
+    margin: 10px 0 10px 0;
+    font-size: 30px;
+    animation: blinkingText 2s infinite
 }
 
-#message {
-    color: green;
-    height: 30px;
-    margin-top: 10px;
-    font-weight: bold
+@keyframes blinkingText {
+    0%{		color:darkgreen;	}
+    50%{	color:green;	}
+	99%{	color:lightgreen;	}
+	100%{	color: green;	}
 }
 
 button{
