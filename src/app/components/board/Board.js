@@ -41,14 +41,11 @@ export default class Board extends React.Component {
 		BOARD_SIZE = document.getElementById("board-size").value;
 		this.forceUpdate()
 		this.redrawTable()
-		this.changeStyle()
 		setBoardSize();
 	}
-	
+
 	changeStyle = () => {
 		let sideLength = BOARD_SIZE * BOARD_SIZE_MULTIPLIER
-		// $(".table").css("height", sideLength) 
-		// $(".table").css("width", sideLength)
 		$("table.table").css({
 			"width": sideLength,
 			"height": sideLength
@@ -57,6 +54,10 @@ export default class Board extends React.Component {
 			"width": BOARD_SIZE_MULTIPLIER,
 			"height": BOARD_SIZE_MULTIPLIER
 		})
+	}
+
+	componentDidUpdate = () => {
+		this.changeStyle()
 	}
 
 	redrawTable = () => {
@@ -92,3 +93,4 @@ export default class Board extends React.Component {
 		);
 	}
 }
+

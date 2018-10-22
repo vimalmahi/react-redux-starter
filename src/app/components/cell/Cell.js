@@ -6,7 +6,7 @@ import React from 'react';
 import './Cell.css';
 import $ from 'jquery'
 import { getBoardSize } from '../board/Board'
-import { Exception } from 'handlebars';
+ 
 // glyphicon glyphicon-star-empty
 export const CROSS_SYMBOL = '<span class="glyphicon glyphicon-ok"></span>'  // Player 1 
 export const CIRCLE_SYMBOL = '<span class="glyphicon glyphicon-star-empty"></span>' // Player 2
@@ -52,7 +52,7 @@ export default class Cell extends React.Component {
 		}
 	} 
 
-	checkForWin = (cellObject, lastSelectedSymbol) => {
+	checkForWin = (cellObject) => {
 		let rowIndex = cellObject.parentNode.rowIndex
 		let colIndex = cellObject.cellIndex
 		tableContent = cellObject.parentNode.parentNode;
@@ -62,8 +62,7 @@ export default class Cell extends React.Component {
 				break;
 			}
 			if (i === NO_OF_CELLS_PER_ROW - 1) {
-				this.showWinningCombo(tableContent, 'row', rowIndex)
-				document.getElementById("message").innerHTML = lastSelectedSymbol+ ' wins'
+				this.showWinnerMsg('row', rowIndex)
 			}
 		}		
 		//Check for same col
@@ -71,9 +70,8 @@ export default class Cell extends React.Component {
 			if (this.getCellValueFromIndicies(tableContent, i, colIndex) !== lastSelectedSymbol) {
 				break;
 			}
-			if (i === NO_OF_CELLS_PER_ROW -1) {
-				this.showWinningCombo(tableContent, 'col', colIndex)
-				document.getElementById("message").innerHTML = lastSelectedSymbol+ ' wins'
+			if (i === NO_OF_CELLS_PER_ROW - 1) {
+				this.showWinnerMsg('col', colIndex)
 			}
 		}
 		this.setSpecialCombos()
@@ -92,6 +90,11 @@ export default class Cell extends React.Component {
 				}
 			}
 		});
+	}
+
+	showWinnerMsg(type, index) {
+		this.showWinningCombo(tableContent, type, index)
+		document.getElementById("message").innerHTML = lastSelectedSymbol+ ' wins'
 	}
 
 	setSpecialCombos = () => {
@@ -113,7 +116,6 @@ export default class Cell extends React.Component {
 	}
 
 	showWinningCombo = (tableContent, orientation, index=null) => {
-		
 		gameComplete = true;
 		drawCountArray[CROSS_SYMBOL] = 0
 		drawCountArray[CIRCLE_SYMBOL] = 0
@@ -135,7 +137,7 @@ export default class Cell extends React.Component {
 				tableContent.rows[specialComboRtl[i][0]].cells[specialComboRtl[i][1]].style.backgroundColor = 'lightgreen'
 			}			
 		} else {
-			throw new Exception("No winning combos found")
+			throw new Error("No winning combos found")
 		}
 	}
 

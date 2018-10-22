@@ -15,15 +15,14 @@ table.table{
     position:fixed;
     top:10%;
     left:5%;
-    font-size: 30px;
+    font-size: 40px;
     animation: blinkingText 2s infinite
 }
 
 @keyframes blinkingText {
-    0%{		color:black;	}
-    50%{	color:gray;	}
-	99%{	color:gray;	}
-	100%{	color: slategrey;	}
+    0%{		color:gold;	}
+    50%{	color:goldenrod;	}
+    100%{	color: gold;	}
 }
 
 button{
