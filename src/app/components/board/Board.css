@@ -12,17 +12,18 @@ table.table{
 }
 
 #message {
-    height: 30px;
-    margin: 10px 0 10px 0;
+    position:fixed;
+    top:10%;
+    left:5%;
     font-size: 30px;
     animation: blinkingText 2s infinite
 }
 
 @keyframes blinkingText {
-    0%{		color:darkgreen;	}
-    50%{	color:green;	}
-	99%{	color:lightgreen;	}
-	100%{	color: green;	}
+    0%{		color:black;	}
+    50%{	color:gray;	}
+	99%{	color:gray;	}
+	100%{	color: slategrey;	}
 }
 
 button{

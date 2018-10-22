@@ -47,14 +47,23 @@ export default class Board extends React.Component {
 	
 	changeStyle = () => {
 		let sideLength = BOARD_SIZE * BOARD_SIZE_MULTIPLIER
-		$(".table").css("height", sideLength) 
-		$(".table").css("width", sideLength)
+		// $(".table").css("height", sideLength) 
+		// $(".table").css("width", sideLength)
+		$("table.table").css({
+			"width": sideLength,
+			"height": sideLength
+		})
+		$(".table td").css({
+			"width": BOARD_SIZE_MULTIPLIER,
+			"height": BOARD_SIZE_MULTIPLIER
+		})
 	}
 
 	redrawTable = () => {
 		resetLastSelectedSymbol()
 		resetGameComplete()
 		$(".cell").html("").removeClass().addClass("cell").attr('style', '')
+		this.changeStyle()
 		$("#message").html("")
 	}
 	
@@ -79,7 +88,6 @@ export default class Board extends React.Component {
 				<Table className="inner-table" id="play-board">
 					<tbody>{this.createCells()}</tbody>
 				</Table>
-				
 			</div>
 		);
 	}
