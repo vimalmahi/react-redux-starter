@@ -22,7 +22,7 @@ table.table{
 @keyframes blinkingText {
     0%{		color:gold;	}
     50%{	color:goldenrod;	}
-    100%{	color: gold;	}
+    80%{	color: black;	}
 }
 
 button{

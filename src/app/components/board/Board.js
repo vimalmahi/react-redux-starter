@@ -8,9 +8,10 @@ import {
 } from 'reactstrap';
 import './Board.css';
 import $ from 'jquery'
+import queryString from 'query-string'
 import Cell, { resetLastSelectedSymbol, resetGameComplete, setBoardSize }  from '../cell/Cell'
 
-let BOARD_SIZE = 3
+let BOARD_SIZE;
 const BOARD_SIZE_MULTIPLIER = 70
 
 export function getBoardSize () {
@@ -21,6 +22,9 @@ export default class Board extends React.Component {
 
 	componentDidMount = () => {
 		this.changeStyle()
+		if (this.props.match.params.size !== 'undefined') {
+			$('#board-size').val(BOARD_SIZE)
+		}
 	}
 
 	createCells = () => {
@@ -39,6 +43,7 @@ export default class Board extends React.Component {
 
 	changeSize = () => {
 		BOARD_SIZE = document.getElementById("board-size").value;
+		this.props.history.push('/size/'+BOARD_SIZE);
 		this.forceUpdate()
 		this.redrawTable()
 		setBoardSize();
@@ -58,6 +63,18 @@ export default class Board extends React.Component {
 
 	componentDidUpdate = () => {
 		this.changeStyle()
+
+	}
+
+	componentWillMount = () => {
+		if (
+			isNaN(this.props.match.params.size) || 
+			this.props.match.params.size > 9 || 
+			this.props.match.params.size < 3
+			) {
+			this.props.match.params.size = 3 //Defaults to minimum size
+			this.props.history.push('/size/3');
+		}
 	}
 
 	redrawTable = () => {
@@ -69,6 +86,7 @@ export default class Board extends React.Component {
 	}
 	
 	render() {
+		BOARD_SIZE = (this.props.match.params.size === 'undefined') ? 3 : this.props.match.params.size;
 		return (
 			<div className="wrapper">
 				<div className="player-info">
