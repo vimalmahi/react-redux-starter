@@ -5,7 +5,7 @@ import Board from './components/board/Board'
 
 export default class App extends Component {
   
-  render() {
+  render = () => {
     return (
       <div className="App">
         

@@ -40,7 +40,7 @@ export default class Cell extends React.Component {
 		NO_OF_CELLS_PER_ROW = getBoardSize()
 	}
 
-	drawSymbol = (event) => {
+	drawSymbol = event => {
 		if (event.target.innerHTML === "" && gameComplete === false && event.target.tagName.toUpperCase() !== 'SPAN') {
 			let symbolToDraw = (lastSelectedSymbol === CIRCLE_SYMBOL) ? CROSS_SYMBOL : CIRCLE_SYMBOL;
 			lastSelectedSymbol = event.target.innerHTML = symbolToDraw;
@@ -52,7 +52,7 @@ export default class Cell extends React.Component {
 		}
 	} 
 
-	checkForWin = (cellObject) => {
+	checkForWin = cellObject => {
 		let rowIndex = cellObject.parentNode.rowIndex
 		let colIndex = cellObject.cellIndex
 		tableContent = cellObject.parentNode.parentNode;

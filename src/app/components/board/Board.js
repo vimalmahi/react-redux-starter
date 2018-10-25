@@ -8,7 +8,7 @@ import {
 } from 'reactstrap';
 import './Board.css';
 import $ from 'jquery'
-import queryString from 'query-string'
+
 import Cell, { resetLastSelectedSymbol, resetGameComplete, setBoardSize }  from '../cell/Cell'
 
 let BOARD_SIZE;
@@ -86,7 +86,7 @@ export default class Board extends React.Component {
 	}
 	
 	render() {
-		BOARD_SIZE = (this.props.match.params.size === 'undefined') ? 3 : this.props.match.params.size;
+		BOARD_SIZE = (this.props.match.params.size === 'undefined') ? 3 : parseInt(this.props.match.params.size, 10);
 		return (
 			<div className="wrapper">
 				<div className="player-info">
