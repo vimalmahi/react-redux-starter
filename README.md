@@ -19,6 +19,6 @@ This will create a *'build'* folder with all necessary assets which needs to be 
 ## Run production build in your local server
 
 *  sudo yarn global add serve
-*  sudo yarn global add serve
+*  serve -s build
 
 Local address will be copied to clipboard automatically. You can just paste (ctrl + v / cmd + v) the URL in the browser address bar & see how your application will work in production. 
